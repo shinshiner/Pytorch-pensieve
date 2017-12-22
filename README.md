@@ -23,10 +23,10 @@ a pytorch implementation of [pensieve](https://github.com/hongzimao/pensieve). T
 Run `cd data` and follow the `Readme.md` in that folder.
 
 ## Training
-Run `cd train` and follow the `Readme.md` in that folder.
+Run `cd train` and follow the [Readme.md](https://github.com/shinshiner/Pytorch-pensieve/blob/master/train/Readme.md) in that folder.
 
 ## Testing
-Run `cd test` and follow the `Readme.md` in that folder.
+Run `cd test` and follow the [Readme.md](https://github.com/shinshiner/Pytorch-pensieve/blob/master/test/Readme.md) in that folder.
 
 ## Real Experiment
 To run real experiment, you need to install the dependences in python2.7 first.
