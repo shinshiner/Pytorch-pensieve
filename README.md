@@ -20,7 +20,7 @@ a pytorch implementation of [pensieve](https://github.com/hongzimao/pensieve). T
 * Google Chrome browser
 
 ## Data
-Run `cd data` and follow the `Readme.md` in that folder.
+Run `cd data` and follow the [Readme.md](https://github.com/shinshiner/Pytorch-pensieve/blob/master/data/Readme.md) in that folder.
 
 ## Training
 Run `cd train` and follow the [Readme.md](https://github.com/shinshiner/Pytorch-pensieve/blob/master/train/Readme.md) in that folder.
