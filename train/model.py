@@ -4,52 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from utils import norm_col_init, weights_init
 
-# class agentNET(torch.nn.Module):
-#     def __init__(self, num_inputs = 1, num_outputs = 6):
-#         super(agentNET, self).__init__()
-#
-#         self.conv1 = nn.Conv1d(num_inputs, 16, 3, stride=1, padding=1)
-#         self.conv2 = nn.Conv1d(16, 16, 2, stride=1)
-#         self.conv3 = nn.Conv1d(16, 8, 2, stride=1)
-#
-#         self.lstm = nn.LSTMCell(32, 20)
-#         self.fc1 = nn.Linear(20, 10)
-#
-#         self.critic_linear = nn.Linear(10, 1)
-#         self.actor_linear = nn.Linear(10, num_outputs)
-#
-#         self.apply(weights_init)
-#         self.actor_linear.weight.data = norm_col_init(
-#             self.actor_linear.weight.data, 0.01)
-#         self.actor_linear.bias.data.fill_(0)
-#
-#         self.critic_linear.weight.data = norm_col_init(
-#             self.critic_linear.weight.data, 1.0)
-#         self.critic_linear.bias.data.fill_(0)
-#
-#         self.fc1.weight.data = norm_col_init(
-#             self.fc1.weight.data, 1.0)
-#         self.fc1.bias.data.fill_(0)
-#
-#         self.lstm.bias_ih.data.fill_(0)
-#         self.lstm.bias_hh.data.fill_(0)
-#
-#         self.train()
-#
-#     def forward(self, inputs):
-#         inputs, (hx, cx) = inputs
-#         x = F.elu(self.conv1(inputs))
-#         x = F.elu(self.conv2(x))
-#         x = F.elu(self.conv3(x))
-#
-#         x = x.view(x.size(0), -1)
-#
-#         hx, cx = self.lstm(x, (hx, cx))
-#
-#         x = F.elu(self.fc1(hx))
-#
-#         return self.critic_linear(x), self.actor_linear(x), (hx, cx)
-
 class agentNET(torch.nn.Module):
     def __init__(self, num_inputs = 1, num_outputs = 6, S_LEN = 8):
         super(agentNET, self).__init__()

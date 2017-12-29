@@ -140,7 +140,7 @@ def test(args, shared_model, all_cooked_time, all_cooked_bw):
                 if args.gpu:
                     model = model.cpu()
                 state_to_save = model.state_dict()
-                torch.save(state_to_save, "./results/pensieve.dat")
+                torch.save(state_to_save, "./results/Nbisieve.dat")
                 if args.gpu:
                     model = model.cuda()
             # save model after a long training
@@ -149,7 +149,7 @@ def test(args, shared_model, all_cooked_time, all_cooked_bw):
                 if args.gpu:
                     model = model.cpu()
                 state_to_save = model.state_dict()
-                torch.save(state_to_save, "./results/pensieve_long.dat")
+                torch.save(state_to_save, "./results/Nbisieve_long.dat")
                 if args.gpu:
                     model = model.cuda()
             # save good model
@@ -158,7 +158,7 @@ def test(args, shared_model, all_cooked_time, all_cooked_bw):
                 if args.gpu:
                     model = model.cpu()
                 state_to_save = model.state_dict()
-                torch.save(state_to_save, "./results/pensieve%d.dat" % (reward_num / TEST_INTERVAL))
+                torch.save(state_to_save, "./results/Nbisieve%d.dat" % (reward_num / TEST_INTERVAL))
                 if args.gpu:
                     model = model.cuda()
 

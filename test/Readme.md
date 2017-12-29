@@ -6,7 +6,8 @@ This part of code can test your model and compare it with other traditional ABR 
 1) Put testing data in folder `cooked_traces`
 2) Put your model in folder `models`
 3) Run `python3 get_video_size.py`
-4) Modify the model name in `test.py`, then run `python3 test.py`
+4) Modify the model path `NN_MODEL` in `test.py`
+5) Run `python3 test.py`
 
 ### To Run Other ABR Algorithms
 * Buffer-based (BB)

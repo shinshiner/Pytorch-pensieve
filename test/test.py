@@ -23,6 +23,7 @@ REBUF_PENALTY = 4.3  # 1 sec rebuffering -> 3 Mbps
 SMOOTH_PENALTY = 1
 DEFAULT_QUALITY = 0  # default video quality without agent
 LOG_FILE = './results/log_sim_better_rl'
+NN_MODEL = ''
 
 def test():
     all_cooked_time, all_cooked_bw, all_file_names = load_trace.load_trace()
@@ -37,118 +38,7 @@ def test():
 
     model = agentNET()
     model.eval()
-    saved_state = torch.load("./models/pensieve_long.dat")
-    model.load_state_dict(saved_state)
-
-    time_stamp = 0
-    last_bit_rate = DEFAULT_QUALITY
-    bit_rate = DEFAULT_QUALITY
-    video_count = 0
-    finish = False
-
-    while True:
-        cx = Variable(torch.zeros(1, 20))
-        hx = Variable(torch.zeros(1, 20))
-
-        state = np.zeros(S_INFO)
-        # do an default action
-        delay, sleep_time, buffer_size, rebuf, \
-        video_chunk_size, next_video_chunk_sizes, \
-        end_of_video, video_chunk_remain = \
-            env.get_video_chunk(DEFAULT_QUALITY)
-
-        time_stamp += delay  # in ms
-        time_stamp += sleep_time  # in ms
-
-        # get new state
-        state[0] = VIDEO_BIT_RATE[bit_rate] / float(np.max(VIDEO_BIT_RATE))  # last quality
-        state[1] = buffer_size / BUFFER_NORM_FACTOR  # 10 sec
-        state[2] = float(video_chunk_size) / float(delay) / M_IN_K  # kilo byte / ms
-        state[3] = float(delay) / M_IN_K / BUFFER_NORM_FACTOR  # 10 sec
-        state[4] = (np.array(next_video_chunk_sizes) / M_IN_K / M_IN_K)[DEFAULT_QUALITY]  # mega byte
-        state[5] = min(video_chunk_remain, CHUNK_TIL_VIDEO_END_CAP) / float(CHUNK_TIL_VIDEO_END_CAP)
-        state = torch.from_numpy(np.array([state, ])).float()
-
-        reward_sum = 0
-
-        while True:
-            value, logit, (hx, cx) = model((Variable(state.unsqueeze(0)),(hx, cx)))
-            prob = F.softmax(logit)
-            action = prob.max(1)[1].data
-
-            bit_rate = action.numpy()[0]
-
-            # do an action
-            delay, sleep_time, buffer_size, rebuf, \
-            video_chunk_size, next_video_chunk_sizes, \
-            end_of_video, video_chunk_remain = \
-                env.get_video_chunk(bit_rate)
-
-            time_stamp += delay  # in ms
-            time_stamp += sleep_time  # in ms
-
-            # -- linear reward --
-            # reward is video quality - rebuffer penalty - smoothness
-            reward = VIDEO_BIT_RATE[bit_rate] / M_IN_K \
-                     - REBUF_PENALTY * rebuf \
-                     - SMOOTH_PENALTY * np.abs(VIDEO_BIT_RATE[bit_rate] -
-                                               VIDEO_BIT_RATE[last_bit_rate]) / M_IN_K
-
-            # get new state
-            state = np.zeros(S_INFO)
-            state[0] = VIDEO_BIT_RATE[last_bit_rate] / float(np.max(VIDEO_BIT_RATE))  # last quality
-            state[1] = buffer_size / BUFFER_NORM_FACTOR  # 10 sec
-            state[2] = float(video_chunk_size) / float(delay) / M_IN_K  # kilo byte / ms
-            state[3] = float(delay) / M_IN_K / BUFFER_NORM_FACTOR  # 10 sec
-            state[4] = (np.array(next_video_chunk_sizes) / M_IN_K / M_IN_K)[action.numpy()[0]]  # mega byte
-            state[5] = min(video_chunk_remain, CHUNK_TIL_VIDEO_END_CAP) / float(CHUNK_TIL_VIDEO_END_CAP)
-            state = torch.from_numpy(np.array([state, ])).float()
-            last_bit_rate = bit_rate
-            reward_sum += reward
-
-            log_file.write(str(time_stamp / M_IN_K) + '\t' +
-                           str(VIDEO_BIT_RATE[bit_rate]) + '\t' +
-                           str(buffer_size) + '\t' +
-                           str(rebuf) + '\t' +
-                           str(video_chunk_size) + '\t' +
-                           str(delay) + '\t' +
-                           str(reward) + '\n')
-            log_file.flush()
-
-            if end_of_video:
-                log_file.write('\n')
-                log_file.close()
-
-                last_bit_rate = DEFAULT_QUALITY
-                bit_rate = DEFAULT_QUALITY
-
-                print("video count", video_count)
-                video_count += 1
-
-                if video_count >= len(all_file_names):
-                    finish = True
-                    break
-
-                log_path = LOG_FILE + '_' + all_file_names[env.trace_idx]
-                log_file = open(log_path, 'w')
-
-        if finish:
-            break
-
-def test_2d():
-    all_cooked_time, all_cooked_bw, all_file_names = load_trace.load_trace()
-
-    torch.manual_seed(233)
-    env = Env.Environment(all_cooked_time=all_cooked_time,
-                      all_cooked_bw=all_cooked_bw,
-                      random_seed=50
-                      )
-    log_path = LOG_FILE + '_' + all_file_names[env.trace_idx]
-    log_file = open(log_path, 'w')
-
-    model = agentNET()
-    model.eval()
-    saved_state = torch.load("./models/pensieve_long.dat")
+    saved_state = torch.load(NN_MODEL)
     model.load_state_dict(saved_state)
 
     time_stamp = 0
@@ -269,4 +159,4 @@ def test_2d():
         if finish:
             break
 
-test_2d()
+test()

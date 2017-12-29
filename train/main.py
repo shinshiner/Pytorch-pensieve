@@ -61,6 +61,7 @@ parser.add_argument(
 
 TRAIN_TRACES = './cooked_traces/'
 TEST_TRACES = './cooked_test_traces/'
+NN_MODEL = ''
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 
         shared_model = agentNET()
         if args.agentload:
-           saved_state = torch.load("./results/pensieve.dat")
+           saved_state = torch.load(NN_MODEL)
            shared_model.load_state_dict(saved_state)
         shared_model.share_memory()
         optimizer = SharedAdam(shared_model.parameters(), lr=args.lr)
