@@ -21,6 +21,7 @@ tar -xvzf data-raw-2016-jun.tar.gz -C fcc
 ```
 
 2) Norway HSDPA bandwidth logs
+
 `wget -r --no-parent --reject "index.html*" http://home.ifi.uio.no/paalh/dataset/hsdpa-tcp-logs/`
 
 3) Belgium 4G/LTE bandwidth logs (bonus)
