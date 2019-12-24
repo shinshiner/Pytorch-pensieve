@@ -1,5 +1,5 @@
 # Pytorch-pensieve
-This is a pytorch implementation of [pensieve](https://github.com/shinshiner/Pytorch-pensieve#reference). The environment and system are based on the original version and the reinforcement learning algorithm is highly brought from [rl_a3c_pytorch](https://github.com/shinshiner/Pytorch-pensieve#reference). The network architecture is totoally changed to get a better result.
+This is a pytorch implementation of [pensieve](https://github.com/shinshiner/Pytorch-pensieve#reference). The environment and system are based on the original version and the reinforcement learning algorithm is highly borrowed from [rl_a3c_pytorch](https://github.com/shinshiner/Pytorch-pensieve#reference). The network architecture is totally changed to get a better result.
 
 ## Requirements
 #### Main Framework
